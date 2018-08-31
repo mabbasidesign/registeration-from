@@ -8,8 +8,8 @@ class Register extends Component {
      };
 
      schema = {
-        username: joi.string().required().label("Username"),
-        password: joi.string().required().label("Password")
+        username: joi.string().required().min(5).label("Username"),
+        password: joi.string().required().min(5).label("Password")
      };
 
     handleChange = ({ currentTarget: input }) => {
@@ -36,13 +36,10 @@ class Register extends Component {
     };
 
     validateProperty = ({ name, value }) => {
-        if(name === "username"){
-            if(value.trim() === '') return "username is required";
-        }
-            
-        if(name === "password"){
-            if(value.trim() === '') return "password is required";
-        }
+        const obj = { [name]: value };
+        const schema = { [name]: this.schema[name] };
+        const { error } = joi.validate(obj, schema);
+        return error ? error.details[0].message: null;
     }
 
     handleSubmit = e => {
