@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import LoginForm from "./components/loginForm";
+import Register from "./components/register";
 import registerServiceWorker from './registerServiceWorker';
 import "bootstrap/dist/css/bootstrap.css";
 
-ReactDOM.render(<LoginForm />, document.getElementById('root'));
+ReactDOM.render(<Register />, document.getElementById('root'));
 registerServiceWorker();

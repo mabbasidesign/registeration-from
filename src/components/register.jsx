@@ -1,36 +1,16 @@
 import React, { Component } from 'react';
+import joi from "joi-browser";
 
-class LoginForm extends Component {
+class Register extends Component {
     state = { 
         account: {username: "", password: ""},
         errors : {}
-     }
+     };
 
-    handleSubmit = e => {
-        // e.preventDefault();
-        // console.log("Submited");
-
-        e.preventDefault();
-
-        const errors = this.validate();
-        console.log(errors);
-        this.setState({ errors: errors || {} });
-        if(errors) return;
-
-        console.log("submitted");
-    }
-    
-    // handleChange = e => {
-    //     const account = {...this.state.account};
-    //     account.username = e.currentTarget.value;
-    //     this.setState({ account });
-    // }
-
-    // handleChange = ({ currentTarget: input }) => {
-    //     const account = {...this.state.account};
-    //     account[input.name] = input.value;
-    //     this.setState({ account });
-    // }
+     schema = {
+        username: joi.string().required().label("Username"),
+        password: joi.string().required().label("Password")
+     };
 
     handleChange = ({ currentTarget: input }) => {
         const errors = {...this.state.errors}
@@ -44,15 +24,15 @@ class LoginForm extends Component {
     }
 
     validate = () => {
+        const result = joi.validate(this.state.account, this.schema, { abortEarly: false });
+        console.log(result);
+
+        if(!result.error) return null;
+
         const errors = {};
-
-        const { account } = this.state;
-        if(account.username.trim() === "" )
-            errors.username = "Username is required";
-        if(account.password.trim() === "")
-            errors.password = "Password is required";
-
-        return Object.keys(errors).length === 0 ? null: errors;
+        for(let item of result.error.details)
+            errors[item.path[0]] = item.message;
+        return errors;
     };
 
     validateProperty = ({ name, value }) => {
@@ -64,6 +44,17 @@ class LoginForm extends Component {
             if(value.trim() === '') return "password is required";
         }
     }
+
+    handleSubmit = e => {
+        e.preventDefault();
+
+        const errors = this.validate();
+        console.log(errors);
+        this.setState({ errors: errors || {} });
+        if(errors) return;
+
+        console.log("submitted");
+    }  
 
     render() {
         const { account } = this.state;
@@ -102,4 +93,4 @@ class LoginForm extends Component {
     }
 }
 
-export default LoginForm;
+export default Register;
