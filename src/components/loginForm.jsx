@@ -14,7 +14,7 @@ class LoginForm extends Component {
 
         const errors = this.validate();
         console.log(errors);
-        this.setState({ errors });
+        this.setState({ errors: errors || {} });
         if(errors) return;
 
         console.log("submitted");
@@ -54,14 +54,15 @@ class LoginForm extends Component {
 
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
-                    <label htmlFor="password">Password</label>
                     <input
                     onChange={this.handleChange}
                     value={account.username}
                     name="username"
                     id="password"
                     className="form-control"/>
+                    { this.state.errors.username && <div className="aler alert-danger"> {this.state.errors.username} </div> }
                 </div>
+                
 
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
@@ -71,6 +72,7 @@ class LoginForm extends Component {
                     name="password"
                     id="password"
                     className="form-control"/>
+                    { this.state.errors.password && <div className="aler alert-danger"> {this.state.errors.password} </div> }
                 </div>
 
                 <button className="btn btn-primary" tyoe="submit">Login</button>
